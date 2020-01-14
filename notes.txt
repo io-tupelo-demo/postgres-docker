@@ -1,0 +1,4 @@
+
+https://hackernoon.com/dont-install-postgres-docker-pull-postgres-bee20e200198
+https://hub.docker.com/_/postgres
+
