@@ -1,0 +1,96 @@
+
+= Don't Install Postgres, use `docker run postgres` !!!
+
+== Overview
+
+We all love Postgres (nee PostgreSQL), but installing and maintaining a native installation on 
+your operating system of choice is a pain. Instead, let 
+link:https://www.docker.com[Docker] take care of the details for you.
+
+== Setup
+
+Make sure you have docker installed on your computer.  You should be able to do the following on the
+command line:
+
+```bash
+> docker --version
+Docker version 20.10.7, build 20.10.7-0ubuntu1~20.04.2
+```
+
+You should not have to use `sudo` to make the above work.
+If it fails, please see 
+https://stackoverflow.com/questions/29101043/cant-connect-to-docker-from-docker-compose[this page on StackOverflow.com]
+
+== Usage
+
+Kick off a local version of Postgres running in Docker via:
+
+```bash
+> ./pg-start.bash
+c406d9cb25f1f57025620ac32d97707eef6f11b44e763d853dad03a7a015b5e5    # <= Docker container ID
+```
+
+All Postgres files will be saved locally under your home directory in:
+
+    $HOME/docker/volumes/postgres
+
+You can stop the Postgres container by typing:
+
+    > ./pg-stop.bash        # or just type:  docker stop pg-docker  
+
+Feel free to look inside the two Bash scripts to see the details.
+
+== Interact with the Postgres DB via PSQL:
+
+```pre
+  > psql-start.bash
+  psql (14.0 (Debian 14.0-1.pgdg110+1))
+  Type "help" for help.
+
+  postgres=# select version();
+                                       version                                                           
+  ------------------------------------------------------------------------------------------
+   PostgreSQL 14.0 (Debian 14.0-1.pgdg110+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit
+  (1 row)
+
+  postgres=# exit
+```
+
+You can also give PSQL command line arguments to the script:
+
+```pre
+> psql-start.bash --version 
+psql (PostgreSQL) 14.0 (Debian 14.0-1.pgdg110+1)
+
+```
+
+or
+
+```
+> psql-start.bash  --list
+                                 List of databases
+   Name    |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------+----------+----------+------------+------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+           |          |          |            |            | postgres=CTc/postgres
+(3 rows)
+```
+
+== Next Steps
+
+The above scripts invoke the latest version of Postgres in a container with the default password
+(`"docker"`). This is a great way to get started for exploration of Postgres, and also a great
+way to run unit tests!  For production use, of course, you'll need to use a more secure
+installation with a different password and a more permanent location for Postgres to store it's DB
+files.
+
+== Credits 
+
+ - Inspiration for this approach can be found
+      https://hackernoon.com/dont-install-postgres-docker-pull-postgres-bee20e200198[here]
+ - The latest Docker images for Postgres can be found
+      https://hub.docker.com/_/postgres[on Docker Hub]
+
